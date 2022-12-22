@@ -3,7 +3,11 @@ class MessagesController < ApplicationController
 
   # GET /messages or /messages.json
   def index
-    @messages = Message.all
+    # ↓リッチテキストはポリモーフィック関連で紐付けされているので、以下のやり方だとN+1問題が起きる
+    # @messages = Message.all
+
+    # with_rich_text_カラム名 を使うことでeager loadしてくれるので無駄にクエリを発行しないようにできる
+    @messages = Message.with_rich_text_context
   end
 
   # GET /messages/1 or /messages/1.json
